@@ -101,3 +101,26 @@ export const EVENT_CATEGORIES = [
 ] as const;
 
 export const PRODUCT_SIZES = ["XS", "S", "M", "L", "XL", "XXL"] as const;
+
+// Blended MFLH leaderboard score. Tweak weights here — no migration needed
+// (the SQL function returns raw counts; points are computed in the app).
+export const SCORING = {
+  checkin: 10,
+  workout: 15,
+  benchmark: 20,
+  classAttended: 5
+} as const;
+
+export function mflhPoints(row: {
+  checkins: number;
+  workouts: number;
+  benchmarks: number;
+  classes_attended: number;
+}) {
+  return (
+    row.checkins * SCORING.checkin +
+    row.workouts * SCORING.workout +
+    row.benchmarks * SCORING.benchmark +
+    row.classes_attended * SCORING.classAttended
+  );
+}

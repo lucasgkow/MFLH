@@ -153,6 +153,43 @@ export async function getMyBenchmarkResults(): Promise<BenchmarkResult[]> {
   return (data as BenchmarkResult[]) ?? [];
 }
 
+export type LeaderboardRow = {
+  id: string;
+  display_name: string;
+  avatar_url: string | null;
+  checkins: number;
+  workouts: number;
+  benchmarks: number;
+  classes_attended: number;
+  points: number;
+  rank: number;
+};
+
+export async function getLeaderboard(): Promise<LeaderboardRow[]> {
+  const supabase = createClient();
+  const { data } = await supabase.rpc("leaderboard");
+  const { mflhPoints } = await import("@/lib/constants");
+  const rows = ((data as any[]) ?? []).map((r) => {
+    const counts = {
+      checkins: Number(r.checkins),
+      workouts: Number(r.workouts),
+      benchmarks: Number(r.benchmarks),
+      classes_attended: Number(r.classes_attended)
+    };
+    return {
+      id: r.id as string,
+      display_name: r.display_name as string,
+      avatar_url: (r.avatar_url as string) ?? null,
+      ...counts,
+      points: mflhPoints(counts),
+      rank: 0
+    };
+  });
+  rows.sort((a, b) => b.points - a.points);
+  rows.forEach((r, i) => (r.rank = i + 1));
+  return rows;
+}
+
 export async function getFeed() {
   const supabase = createClient();
   const {

@@ -2,12 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon, CalendarIcon, DumbbellIcon, FeedIcon } from "./Icons";
+import {
+  HomeIcon,
+  CalendarIcon,
+  DumbbellIcon,
+  TrophyIcon,
+  FeedIcon
+} from "./Icons";
 
 const ITEMS = [
   { href: "/member", label: "Home", Icon: HomeIcon },
   { href: "/member/schedule", label: "Schedule", Icon: CalendarIcon },
   { href: "/member/workouts", label: "Train", Icon: DumbbellIcon },
+  { href: "/member/leaderboard", label: "Ranks", Icon: TrophyIcon },
   { href: "/member/social", label: "Social", Icon: FeedIcon }
 ];
 

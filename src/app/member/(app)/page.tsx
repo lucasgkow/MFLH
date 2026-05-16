@@ -3,7 +3,8 @@ import { requireMember } from "@/lib/auth";
 import {
   getCheckinStats,
   getUpcomingClasses,
-  getTodayRoutine
+  getTodayRoutine,
+  getLeaderboard
 } from "@/lib/member-data";
 import { checkIn } from "@/app/member/actions";
 import { MembershipCard } from "@/components/member/MembershipCard";
@@ -13,11 +14,13 @@ export const dynamic = "force-dynamic";
 
 export default async function MemberHome() {
   const { user, profile } = await requireMember();
-  const [stats, classes, routine] = await Promise.all([
+  const [stats, classes, routine, board] = await Promise.all([
     getCheckinStats(),
     getUpcomingClasses(),
-    getTodayRoutine()
+    getTodayRoutine(),
+    getLeaderboard()
   ]);
+  const myRank = board.find((r) => r.id === user.id);
   const name =
     profile?.first_name ||
     profile?.display_name ||
@@ -71,6 +74,29 @@ export default async function MemberHome() {
           ))}
         </div>
       </section>
+
+      {myRank && (
+        <Link
+          href="/member/leaderboard"
+          className="card-link flex items-center justify-between p-6"
+        >
+          <div>
+            <p className="eyebrow">MFLH Rank</p>
+            <p className="font-display text-5xl uppercase leading-none">
+              #{myRank.rank}
+              <span className="ml-2 text-xl text-bone/40">
+                / {board.length}
+              </span>
+            </p>
+          </div>
+          <p className="font-display text-5xl text-flame">
+            {myRank.points}
+            <span className="ml-1 text-sm uppercase tracking-widest text-bone/40">
+              pts
+            </span>
+          </p>
+        </Link>
+      )}
 
       {nextClass && (
         <section>
