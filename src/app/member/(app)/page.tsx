@@ -18,19 +18,26 @@ export default async function MemberHome() {
     getUpcomingClasses(),
     getTodayRoutine()
   ]);
-  const name = profile?.display_name || profile?.full_name || "Athlete";
+  const name =
+    profile?.first_name ||
+    profile?.display_name ||
+    profile?.full_name ||
+    "Athlete";
   const nextClass = classes[0];
 
   return (
-    <div className="space-y-8">
-      <div>
+    <div className="space-y-10">
+      <header>
         <p className="eyebrow">Welcome back</p>
-        <h1 className="text-5xl uppercase leading-none">{name}</h1>
-      </div>
+        <h1 className="text-7xl uppercase leading-[0.8]">
+          {name}
+          <span className="text-flame">.</span>
+        </h1>
+      </header>
 
       <MembershipCard
         memberId={user.id}
-        name={name}
+        name={profile?.full_name || name}
         status={(profile?.membership_status || "active").toUpperCase()}
       />
 
@@ -38,90 +45,91 @@ export default async function MemberHome() {
         <button className="btn-primary w-full">Check In Now</button>
       </form>
 
-      <div>
-        <p className="eyebrow mb-3">Attendance</p>
-        <div className="grid grid-cols-2 gap-3">
+      <section>
+        <div className="mb-3 flex items-end justify-between">
+          <p className="eyebrow">Attendance</p>
+          <Link
+            href="/member/checkins"
+            className="font-body text-[11px] font-bold uppercase tracking-[0.2em] text-flame hover:underline"
+          >
+            History →
+          </Link>
+        </div>
+        <div className="grid grid-cols-4 divide-x divide-concrete border border-concrete">
           {[
-            ["Week", stats.week],
-            ["Month", stats.month],
-            ["Year", stats.year],
-            ["All time", stats.all]
+            ["Wk", stats.week],
+            ["Mo", stats.month],
+            ["Yr", stats.year],
+            ["All", stats.all]
           ].map(([label, val]) => (
-            <div
-              key={label as string}
-              className="border border-concrete bg-concrete/40 p-5"
-            >
-              <p className="font-body text-xs uppercase tracking-[0.2em] text-bone/50">
+            <div key={label as string} className="p-4 text-center">
+              <p className="stat-num text-flame">{val}</p>
+              <p className="mt-1 font-body text-[10px] uppercase tracking-[0.2em] text-bone/40">
                 {label}
               </p>
-              <p className="font-display text-5xl">{val}</p>
             </div>
           ))}
         </div>
-        <Link
-          href="/member/checkins"
-          className="mt-3 inline-block font-body text-xs font-bold uppercase tracking-[0.2em] text-flame"
-        >
-          View all check-ins →
-        </Link>
-      </div>
+      </section>
 
       {nextClass && (
-        <div>
+        <section>
           <p className="eyebrow mb-3">Next class</p>
           <Link
             href={`/member/schedule/${nextClass.id}`}
-            className="block border border-concrete bg-[#0d0d0d] p-5 hover:border-flame"
+            className="card-link block p-6"
           >
-            <p className="font-display text-3xl uppercase">
-              {nextClass.title}
-            </p>
             <p className="font-body text-sm text-flame">
               {formatDateTime(nextClass.starts_at)}
             </p>
-            <p className="mt-1 font-body text-xs uppercase tracking-widest text-bone/40">
-              {nextClass.mine ? "You're registered" : "Tap to register"} ·{" "}
+            <p className="mt-1 font-display text-4xl uppercase leading-none">
+              {nextClass.title}
+            </p>
+            <p className="mt-3 font-body text-xs uppercase tracking-[0.2em] text-bone/40">
+              {nextClass.mine ? "You're in" : "Tap to register"} ·{" "}
               {nextClass.registered}/{nextClass.capacity}
             </p>
           </Link>
-        </div>
+        </section>
       )}
 
-      <div>
+      <section>
         <p className="eyebrow mb-3">Today&apos;s routine</p>
         {routine ? (
           <Link
             href={`/member/routines/${routine.id}`}
-            className="block border border-concrete bg-[#0d0d0d] p-5 hover:border-flame"
+            className="card-link block p-6"
           >
-            <p className="font-display text-3xl uppercase">
+            <p className="font-display text-4xl uppercase leading-none">
               {routine.title}
             </p>
-            <p className="mt-2 line-clamp-3 whitespace-pre-line font-body text-sm text-bone/60">
+            <p className="mt-3 line-clamp-3 whitespace-pre-line font-body text-sm text-bone/55">
               {routine.body}
             </p>
           </Link>
         ) : (
-          <p className="border border-concrete bg-[#0d0d0d] p-5 font-body text-sm text-bone/50">
+          <p className="card p-6 font-body text-sm text-bone/50">
             No routine posted yet. Check back before class.
           </p>
         )}
-      </div>
+      </section>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Link
-          href="/member/benchmarks"
-          className="border border-concrete p-5 text-center font-display text-2xl uppercase hover:border-flame"
-        >
-          Hyrox Board
-        </Link>
-        <Link
-          href="/member/routines"
-          className="border border-concrete p-5 text-center font-display text-2xl uppercase hover:border-flame"
-        >
-          Routines
-        </Link>
-      </div>
+      <section className="grid grid-cols-2 gap-3">
+        {[
+          ["/member/benchmarks", "Hyrox"],
+          ["/member/routines", "Routines"],
+          ["/member/checkins", "History"],
+          ["/member/workouts", "Train"]
+        ].map(([href, label]) => (
+          <Link
+            key={href}
+            href={href}
+            className="card-link flex items-center justify-center p-6 font-display text-3xl uppercase"
+          >
+            {label}
+          </Link>
+        ))}
+      </section>
     </div>
   );
 }

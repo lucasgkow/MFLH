@@ -1,6 +1,7 @@
 import { requireMember } from "@/lib/auth";
 import { getBenchmarks, getMyBenchmarkResults } from "@/lib/member-data";
 import { recordBenchmark } from "@/app/member/actions";
+import { MemberHeading } from "@/components/member/MemberHeading";
 import { secsToClock, formatDay } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -22,9 +23,8 @@ export default async function BenchmarksPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="eyebrow">Hyrox</p>
-        <h1 className="text-5xl uppercase leading-none">Benchmarks</h1>
-        <p className="mt-2 font-body text-sm text-bone/55">
+        <MemberHeading eyebrow="Hyrox" title="Benchmarks" />
+        <p className="mt-3 font-body text-sm text-bone/55">
           Track every station. Beat your numbers.
         </p>
       </div>

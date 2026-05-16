@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireMember } from "@/lib/auth";
 import { getUpcomingClasses } from "@/lib/member-data";
 import { registerForClass, cancelRegistration } from "@/app/member/actions";
+import { MemberHeading } from "@/components/member/MemberHeading";
 import { formatDateTime } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -12,10 +13,7 @@ export default async function SchedulePage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="eyebrow">Schedule</p>
-        <h1 className="text-5xl uppercase leading-none">Classes</h1>
-      </div>
+      <MemberHeading eyebrow="Schedule" title="Classes" />
 
       {classes.length === 0 && (
         <p className="border border-concrete bg-[#0d0d0d] p-8 text-center font-body text-bone/50">

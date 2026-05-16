@@ -5,6 +5,8 @@ import { supabaseConfigured } from "@/lib/supabase/safe";
 export type Profile = {
   id: string;
   role: "member" | "admin";
+  first_name: string | null;
+  last_name: string | null;
   full_name: string | null;
   display_name: string | null;
   avatar_url: string | null;

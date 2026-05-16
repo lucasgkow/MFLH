@@ -8,7 +8,8 @@ import { supabaseConfigured } from "@/lib/supabase/safe";
 
 export default function MemberSignupPage() {
   const router = useRouter();
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +25,14 @@ export default function MemberSignupPage() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: name, display_name: name } }
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          full_name: `${firstName} ${lastName}`.trim(),
+          display_name: firstName
+        }
+      }
     });
     setLoading(false);
     if (error) return setError(error.message);
@@ -69,17 +77,31 @@ export default function MemberSignupPage() {
         )}
 
         <form onSubmit={onSubmit} className="grid gap-4">
-          <div>
-            <label htmlFor="name" className="field-label">
-              Full Name
-            </label>
-            <input
-              id="name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="field-input"
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="first" className="field-label">
+                First Name
+              </label>
+              <input
+                id="first"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="field-input"
+              />
+            </div>
+            <div>
+              <label htmlFor="last" className="field-label">
+                Last Name
+              </label>
+              <input
+                id="last"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="field-input"
+              />
+            </div>
           </div>
           <div>
             <label htmlFor="email" className="field-label">

@@ -51,4 +51,21 @@
   .field-input {
     @apply w-full border border-concrete bg-[#111] px-4 py-3 font-body text-bone placeholder:text-bone/30 focus:border-flame;
   }
+
+  /* Shared surface language across site + member app */
+  .card {
+    @apply border border-concrete bg-[#0d0d0d] transition-colors;
+  }
+
+  .card-link {
+    @apply card hover:border-flame;
+  }
+
+  .stat-tile {
+    @apply border border-concrete bg-concrete/30 p-5;
+  }
+
+  .stat-num {
+    @apply font-display text-5xl leading-none;
+  }
 }

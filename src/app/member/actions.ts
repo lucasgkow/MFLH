@@ -161,17 +161,27 @@ export async function addComment(formData: FormData) {
 export async function updateProfile(formData: FormData) {
   const { user } = await requireMember();
   const supabase = createClient();
-  await supabase
-    .from("profiles")
-    .update({
-      full_name: (formData.get("full_name") as string) || null,
-      display_name: (formData.get("display_name") as string) || null,
-      bio: (formData.get("bio") as string) || null,
-      phone: (formData.get("phone") as string) || null
-    })
-    .eq("id", user.id);
+  const first = ((formData.get("first_name") as string) || "").trim();
+  const last = ((formData.get("last_name") as string) || "").trim();
+  const display = ((formData.get("display_name") as string) || "").trim();
+  const avatar = ((formData.get("avatar_url") as string) || "").trim();
+  const composed = `${first} ${last}`.trim();
+
+  const patch: Record<string, string | null> = {
+    first_name: first || null,
+    last_name: last || null,
+    full_name: composed || null,
+    display_name: display || first || null,
+    bio: (formData.get("bio") as string) || null,
+    phone: (formData.get("phone") as string) || null
+  };
+  // Only overwrite the avatar when a new one was uploaded.
+  if (avatar) patch.avatar_url = avatar;
+
+  await supabase.from("profiles").update(patch).eq("id", user.id);
   revalidatePath("/member/profile");
   revalidatePath("/member");
+  revalidatePath("/member/social");
 }
 
 export async function signOutMember() {

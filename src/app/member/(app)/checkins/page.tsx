@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { requireMember } from "@/lib/auth";
 import { getMyCheckins, getCheckinStats } from "@/lib/member-data";
+import { MemberHeading } from "@/components/member/MemberHeading";
 import { formatDateTime } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -14,18 +14,11 @@ export default async function CheckinsPage() {
 
   return (
     <div className="space-y-6">
-      <Link
-        href="/member"
-        className="font-body text-xs font-bold uppercase tracking-[0.2em] text-bone/50 hover:text-flame"
-      >
-        ← Home
-      </Link>
-      <div>
-        <p className="eyebrow">Attendance</p>
-        <h1 className="text-5xl uppercase leading-none">
-          {stats.all} Check-ins
-        </h1>
-      </div>
+      <MemberHeading
+        eyebrow="Attendance"
+        title={`${stats.all} Check-ins`}
+        back={{ href: "/member", label: "Home" }}
+      />
 
       <ul className="divide-y divide-concrete border border-concrete">
         {checkins.length ? (

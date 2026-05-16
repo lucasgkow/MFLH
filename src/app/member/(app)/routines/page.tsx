@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireMember } from "@/lib/auth";
 import { getRoutines } from "@/lib/member-data";
+import { MemberHeading } from "@/components/member/MemberHeading";
 import { formatDay } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -11,10 +12,7 @@ export default async function RoutinesPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="eyebrow">Programming</p>
-        <h1 className="text-5xl uppercase leading-none">Routines</h1>
-      </div>
+      <MemberHeading eyebrow="Programming" title="Routines" />
 
       <ul className="space-y-4">
         {routines.length ? (

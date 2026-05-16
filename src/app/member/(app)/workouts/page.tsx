@@ -3,6 +3,7 @@ import { requireMember } from "@/lib/auth";
 import { getMyWorkoutLogs } from "@/lib/member-data";
 import { deleteWorkoutLog } from "@/app/member/actions";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { MemberHeading } from "@/components/member/MemberHeading";
 import { formatDay } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -13,11 +14,8 @@ export default async function WorkoutsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-end justify-between">
-        <div>
-          <p className="eyebrow">Training Log</p>
-          <h1 className="text-5xl uppercase leading-none">Workouts</h1>
-        </div>
+      <div className="flex items-end justify-between gap-4">
+        <MemberHeading eyebrow="Training Log" title="Workouts" />
         <Link href="/member/workouts/new" className="btn-primary text-xl">
           + Log
         </Link>

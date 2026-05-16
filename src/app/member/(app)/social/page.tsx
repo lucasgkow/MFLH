@@ -6,6 +6,7 @@ import {
   toggleReaction,
   addComment
 } from "@/app/member/actions";
+import { MemberHeading } from "@/components/member/MemberHeading";
 import { timeAgo } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -17,10 +18,7 @@ export default async function SocialPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="eyebrow">The Crew</p>
-        <h1 className="text-5xl uppercase leading-none">Social</h1>
-      </div>
+      <MemberHeading eyebrow="The Crew" title="Social" />
 
       <form
         action={createPost}
@@ -45,9 +43,18 @@ export default async function SocialPage() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center bg-concrete font-display text-sm uppercase">
-                    {(p.profiles?.display_name || "A").slice(0, 2)}
-                  </span>
+                  {p.profiles?.avatar_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={p.profiles.avatar_url}
+                      alt=""
+                      className="h-9 w-9 object-cover"
+                    />
+                  ) : (
+                    <span className="flex h-9 w-9 items-center justify-center bg-concrete font-display text-sm uppercase">
+                      {(p.profiles?.display_name || "A").slice(0, 2)}
+                    </span>
+                  )}
                   <div>
                     <p className="font-display text-lg uppercase leading-none">
                       {p.profiles?.display_name || "Athlete"}

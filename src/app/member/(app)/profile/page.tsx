@@ -1,11 +1,17 @@
 import Link from "next/link";
 import { requireMember } from "@/lib/auth";
 import { updateProfile } from "@/app/member/actions";
+import { AvatarUploader } from "@/components/member/AvatarUploader";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
   const { user, profile } = await requireMember();
+  const initials = (
+    (profile?.first_name?.[0] || "") + (profile?.last_name?.[0] || "") ||
+    profile?.display_name?.slice(0, 2) ||
+    "AT"
+  ).toUpperCase();
 
   return (
     <div className="space-y-6">
@@ -21,18 +27,38 @@ export default async function ProfilePage() {
         <p className="mt-2 font-body text-sm text-bone/45">{user.email}</p>
       </div>
 
-      <form action={updateProfile} className="space-y-4">
-        <div>
-          <label className="field-label" htmlFor="full_name">
-            Full Name
-          </label>
-          <input
-            id="full_name"
-            name="full_name"
-            defaultValue={profile?.full_name ?? ""}
-            className="field-input"
-          />
+      <form action={updateProfile} className="space-y-5">
+        <AvatarUploader
+          userId={user.id}
+          currentUrl={profile?.avatar_url ?? null}
+          initials={initials}
+        />
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="field-label" htmlFor="first_name">
+              First Name
+            </label>
+            <input
+              id="first_name"
+              name="first_name"
+              defaultValue={profile?.first_name ?? ""}
+              className="field-input"
+            />
+          </div>
+          <div>
+            <label className="field-label" htmlFor="last_name">
+              Last Name
+            </label>
+            <input
+              id="last_name"
+              name="last_name"
+              defaultValue={profile?.last_name ?? ""}
+              className="field-input"
+            />
+          </div>
         </div>
+
         <div>
           <label className="field-label" htmlFor="display_name">
             Display Name (shown in the feed & rosters)
@@ -44,17 +70,20 @@ export default async function ProfilePage() {
             className="field-input"
           />
         </div>
+
         <div>
           <label className="field-label" htmlFor="phone">
-            Phone
+            Phone Number
           </label>
           <input
             id="phone"
             name="phone"
+            type="tel"
             defaultValue={profile?.phone ?? ""}
             className="field-input"
           />
         </div>
+
         <div>
           <label className="field-label" htmlFor="bio">
             Bio
@@ -67,6 +96,7 @@ export default async function ProfilePage() {
             className="field-input"
           />
         </div>
+
         <button className="btn-primary w-full">Save Profile</button>
       </form>
 
