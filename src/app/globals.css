@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ink text-bone font-body antialiased;
+  }
+
+  ::selection {
+    @apply bg-flame text-ink;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-flame ring-offset-2 ring-offset-ink;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center bg-flame px-8 py-4 font-display text-2xl uppercase tracking-wide text-ink transition-colors hover:bg-bone;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center border border-bone/40 px-8 py-4 font-display text-2xl uppercase tracking-wide text-bone transition-colors hover:border-flame hover:text-flame;
+  }
+
+  .eyebrow {
+    @apply font-body text-xs font-bold uppercase tracking-[0.3em] text-flame;
+  }
+
+  .field-label {
+    @apply mb-2 block font-body text-xs font-bold uppercase tracking-[0.2em] text-bone/70;
+  }
+
+  .field-input {
+    @apply w-full border border-concrete bg-[#111] px-4 py-3 font-body text-bone placeholder:text-bone/30 focus:border-flame;
+  }
+}
