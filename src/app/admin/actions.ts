@@ -231,3 +231,57 @@ export async function adminDeletePost(id: string) {
   revalidatePath("/admin/feed");
   revalidatePath("/member/social");
 }
+
+export async function saveProgram(formData: FormData) {
+  await requireAdmin();
+  const db = createAdminClient();
+  const id = formData.get("id") as string | null;
+  const title = String(formData.get("title"));
+  const row = {
+    title,
+    slug:
+      (formData.get("slug") as string)?.trim() || slugify(title),
+    description: (formData.get("description") as string) || null,
+    weeks: Number(formData.get("weeks") || 4),
+    published: formData.get("published") === "on"
+  };
+  if (id) {
+    await db.from("programs").update(row).eq("id", id);
+  } else {
+    await db.from("programs").insert(row);
+  }
+  revalidatePath("/admin/programs");
+  revalidatePath("/member/programs");
+  redirect("/admin/programs");
+}
+
+export async function deleteProgram(id: string) {
+  await requireAdmin();
+  const db = createAdminClient();
+  await db.from("programs").delete().eq("id", id);
+  revalidatePath("/admin/programs");
+  revalidatePath("/member/programs");
+}
+
+export async function saveProgramWorkout(formData: FormData) {
+  await requireAdmin();
+  const db = createAdminClient();
+  await db.from("program_workouts").insert({
+    program_id: String(formData.get("program_id")),
+    week: Number(formData.get("week") || 1),
+    day: Number(formData.get("day") || 1),
+    title: String(formData.get("title")),
+    body: String(formData.get("body")),
+    position: Number(formData.get("position") || 0)
+  });
+  revalidatePath(`/admin/programs/${formData.get("program_id")}`);
+  revalidatePath("/member/programs");
+}
+
+export async function deleteProgramWorkout(id: string) {
+  await requireAdmin();
+  const db = createAdminClient();
+  await db.from("program_workouts").delete().eq("id", id);
+  revalidatePath("/admin/programs");
+  revalidatePath("/member/programs");
+}

@@ -142,9 +142,9 @@ export default async function MemberHome() {
 
       <section className="grid grid-cols-2 gap-3">
         {[
+          ["/member/programs", "Programs"],
           ["/member/benchmarks", "Hyrox"],
           ["/member/routines", "Routines"],
-          ["/member/checkins", "History"],
           ["/member/workouts", "Train"]
         ].map(([href, label]) => (
           <Link

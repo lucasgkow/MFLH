@@ -153,6 +153,33 @@ export async function getMyBenchmarkResults(): Promise<BenchmarkResult[]> {
   return (data as BenchmarkResult[]) ?? [];
 }
 
+export async function getPrograms() {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("programs")
+    .select("*")
+    .order("created_at", { ascending: false });
+  return (data as any[]) ?? [];
+}
+
+export async function getProgram(id: string) {
+  const supabase = createClient();
+  const { data: program } = await supabase
+    .from("programs")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (!program) return null;
+  const { data: workouts } = await supabase
+    .from("program_workouts")
+    .select("*")
+    .eq("program_id", id)
+    .order("week", { ascending: true })
+    .order("day", { ascending: true })
+    .order("position", { ascending: true });
+  return { program, workouts: workouts ?? [] };
+}
+
 export type LeaderboardRow = {
   id: string;
   display_name: string;

@@ -11,7 +11,9 @@ import type {
   GymClass,
   Routine,
   MemberProfile,
-  Post
+  Post,
+  Program,
+  ProgramWorkout
 } from "@/lib/types";
 
 // Service-role reads for the admin portal. Returns empty data when the
@@ -240,4 +242,136 @@ export async function adminGetPosts(): Promise<Post[]> {
     .select("*, profiles(display_name)")
     .order("created_at", { ascending: false });
   return (data as Post[]) ?? [];
+}
+
+export async function adminGetPrograms(): Promise<
+  (Program & { count: number })[]
+> {
+  if (!serviceRoleConfigured()) return [];
+  const db = createAdminClient();
+  const { data: programs } = await db
+    .from("programs")
+    .select("*")
+    .order("created_at", { ascending: false });
+  const { data: pw } = await db
+    .from("program_workouts")
+    .select("program_id");
+  return ((programs as Program[]) ?? []).map((p) => ({
+    ...p,
+    count: (pw ?? []).filter((w: any) => w.program_id === p.id).length
+  }));
+}
+
+export async function adminGetProgram(id: string): Promise<{
+  program: Program;
+  workouts: ProgramWorkout[];
+} | null> {
+  if (!serviceRoleConfigured()) return null;
+  const db = createAdminClient();
+  const { data: program } = await db
+    .from("programs")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (!program) return null;
+  const { data: workouts } = await db
+    .from("program_workouts")
+    .select("*")
+    .eq("program_id", id)
+    .order("week", { ascending: true })
+    .order("day", { ascending: true })
+    .order("position", { ascending: true });
+  return {
+    program: program as Program,
+    workouts: (workouts as ProgramWorkout[]) ?? []
+  };
+}
+
+export type ActivityItem = {
+  id: string;
+  when: string;
+  text: string;
+  kind: string;
+};
+
+export async function adminGetActivity(): Promise<ActivityItem[]> {
+  if (!serviceRoleConfigured()) return [];
+  const db = createAdminClient();
+  const [members, checkins, workouts, regs, posts] = await Promise.all([
+    db
+      .from("profiles")
+      .select("id, display_name, full_name, created_at")
+      .order("created_at", { ascending: false })
+      .limit(20),
+    db
+      .from("member_checkins")
+      .select("id, member_id, checked_in_at, profiles(display_name)")
+      .order("checked_in_at", { ascending: false })
+      .limit(20),
+    db
+      .from("workout_logs")
+      .select("id, title, created_at, profiles(display_name)")
+      .order("created_at", { ascending: false })
+      .limit(20),
+    db
+      .from("class_registrations")
+      .select(
+        "id, created_at, profiles(display_name), classes(title)"
+      )
+      .order("created_at", { ascending: false })
+      .limit(20),
+    db
+      .from("posts")
+      .select("id, created_at, profiles(display_name)")
+      .order("created_at", { ascending: false })
+      .limit(20)
+  ]);
+
+  const items: ActivityItem[] = [];
+  (members.data ?? []).forEach((m: any) =>
+    items.push({
+      id: `m-${m.id}`,
+      when: m.created_at,
+      kind: "Member",
+      text: `New member — ${m.display_name || m.full_name || "Athlete"}`
+    })
+  );
+  (checkins.data ?? []).forEach((c: any) =>
+    items.push({
+      id: `c-${c.id}`,
+      when: c.checked_in_at,
+      kind: "Check-in",
+      text: `${c.profiles?.display_name || "Athlete"} checked in`
+    })
+  );
+  (workouts.data ?? []).forEach((w: any) =>
+    items.push({
+      id: `w-${w.id}`,
+      when: w.created_at,
+      kind: "Workout",
+      text: `${w.profiles?.display_name || "Athlete"} logged "${w.title}"`
+    })
+  );
+  (regs.data ?? []).forEach((r: any) =>
+    items.push({
+      id: `r-${r.id}`,
+      when: r.created_at,
+      kind: "Class",
+      text: `${r.profiles?.display_name || "Athlete"} registered for ${
+        r.classes?.title || "a class"
+      }`
+    })
+  );
+  (posts.data ?? []).forEach((p: any) =>
+    items.push({
+      id: `p-${p.id}`,
+      when: p.created_at,
+      kind: "Post",
+      text: `${p.profiles?.display_name || "Athlete"} posted in the feed`
+    })
+  );
+
+  return items
+    .sort((a, b) => +new Date(b.when) - +new Date(a.when))
+    .slice(0, 40);
 }

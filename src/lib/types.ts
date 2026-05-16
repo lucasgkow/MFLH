@@ -200,6 +200,26 @@ export type PostReaction = {
   emoji: string;
 };
 
+export type Program = {
+  id: string;
+  title: string;
+  slug: string | null;
+  description: string | null;
+  weeks: number;
+  published: boolean;
+  created_at: string;
+};
+
+export type ProgramWorkout = {
+  id: string;
+  program_id: string;
+  week: number;
+  day: number;
+  title: string;
+  body: string;
+  position: number;
+};
+
 export type CartItem = {
   productId: string;
   slug: string;

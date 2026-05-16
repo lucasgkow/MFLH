@@ -12,7 +12,9 @@ const LINKS = [
   { href: "/admin/faqs", label: "FAQs" },
   { href: "/admin/classes", label: "Classes" },
   { href: "/admin/routines", label: "Routines" },
+  { href: "/admin/programs", label: "Programs" },
   { href: "/admin/members", label: "Members" },
+  { href: "/admin/activity", label: "Activity" },
   { href: "/admin/feed", label: "Feed" },
   { href: "/admin/settings", label: "Settings" }
 ];
