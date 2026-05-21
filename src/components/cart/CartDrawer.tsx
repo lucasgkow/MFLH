@@ -1,11 +1,28 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "./CartProvider";
+import { createCheckout } from "@/app/(site)/shop/checkout";
 
 export function CartDrawer() {
   const { isOpen, closeCart, items, updateQuantity, removeItem, subtotal } =
     useCart();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function checkout() {
+    if (!items.length || loading) return;
+    setLoading(true);
+    setError(null);
+    const res = await createCheckout(items);
+    if (res.url) {
+      window.location.href = res.url;
+      return;
+    }
+    setError(res.error ?? "Something went wrong.");
+    setLoading(false);
+  }
 
   return (
     <>
@@ -104,15 +121,19 @@ export function CartDrawer() {
             <span className="text-flame">${subtotal.toFixed(2)}</span>
           </div>
           <button
-            disabled={items.length === 0}
+            onClick={checkout}
+            disabled={items.length === 0 || loading}
             className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-40"
-            title="Checkout coming soon"
           >
-            Checkout
+            {loading ? "Starting…" : "Checkout"}
           </button>
+          {error && (
+            <p className="mt-3 text-center font-body text-[11px] uppercase tracking-widest text-flame">
+              {error}
+            </p>
+          )}
           <p className="mt-3 text-center font-body text-[11px] uppercase tracking-widest text-bone/40">
-            {/* TODO: Stripe checkout not yet wired */}
-            Checkout coming soon
+            Secure checkout via Square
           </p>
           <Link
             href="/shop"

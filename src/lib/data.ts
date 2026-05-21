@@ -1,5 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { supabaseConfigured } from "@/lib/supabase/safe";
+import {
+  squareConfigured,
+  listSquareProducts,
+  getSquareProduct
+} from "@/lib/square";
 import type { EventRow, Product, Faq } from "@/lib/types";
 
 // Public read helpers. All degrade to empty results when Supabase is not yet
@@ -56,7 +61,7 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function getFeaturedProducts(limit = 3): Promise<Product[]> {
-  const products = await getProducts();
+  const products = await getShopProducts();
   const featured = products.filter((p) => p.featured);
   return (featured.length ? featured : products).slice(0, limit);
 }
@@ -72,6 +77,18 @@ export async function getProductBySlug(
     .eq("slug", slug)
     .maybeSingle();
   return (data as Product) ?? null;
+}
+
+// Source-agnostic storefront reads: Square catalog when configured (so coffee +
+// merch share one Square dashboard), otherwise the Supabase products table.
+export async function getShopProducts(): Promise<Product[]> {
+  if (squareConfigured()) return listSquareProducts();
+  return getProducts();
+}
+
+export async function getShopProduct(slug: string): Promise<Product | null> {
+  if (squareConfigured()) return getSquareProduct(slug);
+  return getProductBySlug(slug);
 }
 
 export async function getFaqs(): Promise<Faq[]> {

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getProductBySlug } from "@/lib/data";
+import { getShopProduct } from "@/lib/data";
 import { money } from "@/lib/format";
 import { AddToCart } from "@/components/AddToCart";
 
@@ -13,7 +13,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const product = await getProductBySlug(params.slug);
+  const product = await getShopProduct(params.slug);
   if (!product) return { title: "Product Not Found" };
   return {
     title: product.name,
@@ -26,7 +26,7 @@ export default async function ProductPage({
 }: {
   params: { slug: string };
 }) {
-  const product = await getProductBySlug(params.slug);
+  const product = await getShopProduct(params.slug);
   if (!product) notFound();
 
   return (

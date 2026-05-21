@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getProducts } from "@/lib/data";
+import { getShopProducts } from "@/lib/data";
 import { ProductCard } from "@/components/ProductCard";
 
 export const revalidate = 60;
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ShopPage() {
-  const products = await getProducts();
+  const products = await getShopProducts();
 
   return (
     <section className="container-site py-20">
@@ -30,9 +30,8 @@ export default async function ShopPage() {
         </div>
       ) : (
         <p className="mt-14 border border-concrete bg-[#0d0d0d] p-12 text-center font-body text-bone/50">
-          Merch loads from Supabase once the project is connected. Seed data
-          ships with three drops: Gym Class Hoodie, Perfect Match Tee, and the
-          Real Tree Snapback.
+          Drops are loading. Merch is managed in Square — once the catalog is
+          connected, products appear here automatically.
         </p>
       )}
     </section>

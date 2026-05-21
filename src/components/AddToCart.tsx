@@ -56,8 +56,7 @@ export function AddToCart({ product }: { product: Product }) {
             : "Add To Cart"}
       </button>
       <p className="mt-3 font-body text-[11px] uppercase tracking-widest text-bone/40">
-        {/* TODO: Stripe checkout not yet wired */}
-        Secure checkout coming soon
+        Secure checkout via Square
       </p>
     </div>
   );
