@@ -65,6 +65,11 @@ export function decimalHours(ms: number) {
   return ms / 3_600_000;
 }
 
+// Meters → "X.X mi".
+export function metersToMiles(m: number) {
+  return `${(m / 1609.344).toFixed(1)} mi`;
+}
+
 // Seconds → m:ss.
 export function secsToClock(total: number) {
   const s = Math.max(0, Math.round(total));

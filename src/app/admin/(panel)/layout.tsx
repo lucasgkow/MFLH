@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/admin/shop", label: "Shop" },
   { href: "/admin/staff", label: "Staff" },
   { href: "/admin/referrals", label: "Referrals" },
+  { href: "/admin/run-club", label: "Run Club" },
   { href: "/admin/faqs", label: "FAQs" },
   { href: "/admin/settings", label: "Settings" }
 ];

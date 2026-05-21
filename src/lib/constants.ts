@@ -19,6 +19,7 @@ export const NAV_LINKS = [
   { href: "/training", label: "What We Offer" },
   { href: "/schedule", label: "Schedule" },
   { href: "/events", label: "Events" },
+  { href: "/run-club", label: "Run Club" },
   { href: "/shop", label: "Shop" },
   { href: "/contact", label: "Contact" }
 ] as const;
