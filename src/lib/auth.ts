@@ -31,19 +31,12 @@ async function loadSessionProfile() {
 }
 
 // Admin pages/actions. Middleware gates routing; this is the authoritative
-// role check (defense in depth) — a logged-in member cannot reach admin.
+// role check (defense in depth) — a non-admin user cannot reach admin.
 export async function requireAdmin() {
   const { user, profile } = await loadSessionProfile();
   if (!user) redirect("/admin/login");
-  if (profile?.role !== "admin") redirect("/member");
+  if (profile?.role !== "admin") redirect("/admin/login");
   return { user, profile: profile as Profile };
-}
-
-// Member portal pages/actions. Any authenticated user with a profile.
-export async function requireMember() {
-  const { user, profile } = await loadSessionProfile();
-  if (!user) redirect("/member/login");
-  return { user, profile: profile as Profile | null };
 }
 
 export async function getOptionalProfile() {

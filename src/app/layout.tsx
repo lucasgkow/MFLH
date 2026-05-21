@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { bebas, dmSans } from "@/lib/fonts";
 import { SITE } from "@/lib/constants";
 import { CartProvider } from "@/components/cart/CartProvider";
-import { ServiceWorker } from "@/components/ServiceWorker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,12 +17,6 @@ export const metadata: Metadata = {
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.description,
     type: "website"
-  },
-  manifest: "/manifest.webmanifest",
-  appleWebApp: {
-    capable: true,
-    title: "MFLH",
-    statusBarStyle: "black-translucent"
   },
   icons: {
     icon: "/icons/favicon-32.png",
@@ -47,7 +40,6 @@ export default function RootLayout({
     <html lang="en" className={`${bebas.variable} ${dmSans.variable}`}>
       <body>
         <CartProvider>{children}</CartProvider>
-        <ServiceWorker />
       </body>
     </html>
   );

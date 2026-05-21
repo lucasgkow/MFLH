@@ -8,14 +8,9 @@ const LINKS = [
   { href: "/admin/contact", label: "Contact Forms" },
   { href: "/admin/events", label: "Events" },
   { href: "/admin/events/registrations", label: "Event Sign-ups" },
-  { href: "/admin/shop", label: "Merch" },
+  { href: "/admin/shop", label: "Shop" },
+  { href: "/admin/staff", label: "Staff" },
   { href: "/admin/faqs", label: "FAQs" },
-  { href: "/admin/classes", label: "Classes" },
-  { href: "/admin/routines", label: "Routines" },
-  { href: "/admin/programs", label: "Programs" },
-  { href: "/admin/members", label: "Members" },
-  { href: "/admin/activity", label: "Activity" },
-  { href: "/admin/feed", label: "Feed" },
   { href: "/admin/settings", label: "Settings" }
 ];
 

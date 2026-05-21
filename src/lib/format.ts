@@ -52,7 +52,20 @@ export function timeAgo(iso: string) {
   });
 }
 
-// Seconds → m:ss (used for time-metric Hyrox benchmarks).
+// Milliseconds → "Hh Mm" (used for the staff hours report).
+export function formatHours(ms: number) {
+  const totalMin = Math.round(ms / 60000);
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return `${h}h ${String(m).padStart(2, "0")}m`;
+}
+
+// Milliseconds → decimal hours, 2dp (for payroll math).
+export function decimalHours(ms: number) {
+  return ms / 3_600_000;
+}
+
+// Seconds → m:ss.
 export function secsToClock(total: number) {
   const s = Math.max(0, Math.round(total));
   const m = Math.floor(s / 60);

@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-// Refreshes the Supabase session and gates /admin and /member behind auth.
-// Role enforcement (member vs admin) happens server-side in requireAdmin().
+// Refreshes the Supabase session and gates /admin behind auth.
+// Role enforcement happens server-side in requireAdmin().
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
@@ -11,17 +11,12 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   const isAdmin = path.startsWith("/admin");
-  const isMember = path.startsWith("/member");
   const isAdminLogin = path === "/admin/login";
-  const isMemberAuth = path === "/member/login" || path === "/member/signup";
 
-  // Supabase not configured — allow auth pages, block the rest.
+  // Supabase not configured — allow the login page, block the rest.
   if (!url || !anon) {
     if (isAdmin && !isAdminLogin) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
-    }
-    if (isMember && !isMemberAuth) {
-      return NextResponse.redirect(new URL("/member/login", request.url));
     }
     return response;
   }
@@ -59,16 +54,10 @@ export async function middleware(request: NextRequest) {
   if (isAdminLogin && user) {
     return NextResponse.redirect(new URL("/admin", request.url));
   }
-  if (isMember && !isMemberAuth && !user) {
-    return NextResponse.redirect(new URL("/member/login", request.url));
-  }
-  if (isMemberAuth && user) {
-    return NextResponse.redirect(new URL("/member", request.url));
-  }
 
   return response;
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/member/:path*"]
+  matcher: ["/admin/:path*"]
 };

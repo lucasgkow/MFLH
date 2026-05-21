@@ -20,8 +20,7 @@ export const NAV_LINKS = [
   { href: "/schedule", label: "Schedule" },
   { href: "/events", label: "Events" },
   { href: "/shop", label: "Shop" },
-  { href: "/contact", label: "Contact" },
-  { href: "/member", label: "Members" }
+  { href: "/contact", label: "Contact" }
 ] as const;
 
 export const TRAINING_TRACKS = [

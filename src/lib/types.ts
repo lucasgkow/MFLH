@@ -82,142 +82,25 @@ export type SiteSetting = {
   value: string | null;
 };
 
-// ---- Member portal ----
+// ---- Staff operations ----
 
-export type MemberProfile = {
+export type Staff = {
   id: string;
-  role: "member" | "admin";
-  first_name: string | null;
-  last_name: string | null;
-  full_name: string | null;
-  display_name: string | null;
-  avatar_url: string | null;
-  bio: string | null;
-  phone: string | null;
-  membership_status: string | null;
+  full_name: string;
+  role: string;
+  pin: string | null;
+  hourly_rate: number | null;
+  active: boolean;
   created_at: string;
 };
 
-export type GymClass = {
+export type TimeEntry = {
   id: string;
-  title: string;
-  class_type: string | null;
-  description: string | null;
-  coach_name: string | null;
-  starts_at: string;
-  duration_min: number;
-  capacity: number;
-  location: string | null;
-};
-
-export type ClassRegistration = {
-  id: string;
-  class_id: string;
-  member_id: string;
-  status: "registered" | "waitlisted" | "cancelled" | "attended";
+  staff_id: string;
+  clock_in: string;
+  clock_out: string | null;
+  note: string | null;
   created_at: string;
-};
-
-export type MemberCheckin = {
-  id: string;
-  member_id: string;
-  class_id: string | null;
-  source: string;
-  checked_in_at: string;
-};
-
-export type Routine = {
-  id: string;
-  title: string;
-  body: string;
-  routine_date: string;
-  class_type: string | null;
-  published: boolean;
-  created_at: string;
-};
-
-export type WorkoutLog = {
-  id: string;
-  member_id: string;
-  log_date: string;
-  title: string;
-  notes: string | null;
-  created_at: string;
-};
-
-export type WorkoutEntry = {
-  id: string;
-  log_id: string;
-  exercise: string;
-  reps: number | null;
-  weight_kg: number | null;
-  distance_m: number | null;
-  duration_sec: number | null;
-  position: number;
-};
-
-export type HyroxBenchmark = {
-  id: string;
-  name: string;
-  description: string | null;
-  metric: "time" | "reps" | "weight";
-  display_order: number;
-};
-
-export type BenchmarkResult = {
-  id: string;
-  member_id: string;
-  benchmark_id: string;
-  value: number;
-  recorded_on: string;
-  notes: string | null;
-  created_at: string;
-};
-
-export type Post = {
-  id: string;
-  author_id: string;
-  body: string;
-  image_url: string | null;
-  pinned: boolean;
-  created_at: string;
-  profiles?: { display_name: string | null; avatar_url: string | null } | null;
-};
-
-export type PostComment = {
-  id: string;
-  post_id: string;
-  author_id: string;
-  body: string;
-  created_at: string;
-  profiles?: { display_name: string | null } | null;
-};
-
-export type PostReaction = {
-  id: string;
-  post_id: string;
-  member_id: string;
-  emoji: string;
-};
-
-export type Program = {
-  id: string;
-  title: string;
-  slug: string | null;
-  description: string | null;
-  weeks: number;
-  published: boolean;
-  created_at: string;
-};
-
-export type ProgramWorkout = {
-  id: string;
-  program_id: string;
-  week: number;
-  day: number;
-  title: string;
-  body: string;
-  position: number;
 };
 
 export type CartItem = {
