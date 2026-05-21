@@ -103,6 +103,20 @@ export type TimeEntry = {
   created_at: string;
 };
 
+export type Referral = {
+  id: string;
+  staff_id: string | null;
+  referred_name: string;
+  referred_email: string | null;
+  referred_phone: string | null;
+  status: string;
+  commission_amount: number | null;
+  commission_paid: boolean;
+  note: string | null;
+  created_at: string;
+  staff?: { full_name: string } | null;
+};
+
 export type CartItem = {
   productId: string;
   slug: string;

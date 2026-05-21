@@ -10,6 +10,7 @@ const LINKS = [
   { href: "/admin/events/registrations", label: "Event Sign-ups" },
   { href: "/admin/shop", label: "Shop" },
   { href: "/admin/staff", label: "Staff" },
+  { href: "/admin/referrals", label: "Referrals" },
   { href: "/admin/faqs", label: "FAQs" },
   { href: "/admin/settings", label: "Settings" }
 ];
