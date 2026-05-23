@@ -1,12 +1,8 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { getHoursReport } from "@/lib/staff-data";
-import {
-  REPORT_COOKIE,
-  reportPinIsDefault,
-  verifyReportPin,
-  lockReport
-} from "@/app/admin/staff-actions";
+import { verifyReportPin, lockReport } from "@/app/admin/staff-actions";
+import { REPORT_COOKIE, reportPinIsDefault } from "@/lib/staff-report";
 import { formatHours, decimalHours, formatDateTime, money } from "@/lib/format";
 
 export const dynamic = "force-dynamic";

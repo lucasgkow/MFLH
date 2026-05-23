@@ -6,16 +6,7 @@ import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { serviceRoleConfigured } from "@/lib/supabase/safe";
 import { requireAdmin } from "@/lib/auth";
-
-export const REPORT_COOKIE = "mflh_report_ok";
-
-export function reportPin(): string {
-  return process.env.STAFF_REPORT_PIN || "0000";
-}
-
-export function reportPinIsDefault(): boolean {
-  return !process.env.STAFF_REPORT_PIN;
-}
+import { REPORT_COOKIE, reportPin } from "@/lib/staff-report";
 
 type ClockResult = {
   ok: boolean;
